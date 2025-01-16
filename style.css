@@ -1,0 +1,58 @@
+.maincont{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+}
+canvas{
+    border-radius: 1000px;
+    margin-top: 30px;
+    margin-left: 40px;
+}
+h1 {
+    font-size: 24px;
+    line-height: 1.5;
+    color: #ffffff;
+    float: right;
+    margin-right: 30px;
+    text-align: right;
+  }
+  #rocket-details {
+    margin-top: 20px;
+    color: #ffffff;
+    font-size: 18px;
+    margin-left: 50px;
+
+  }
+  body {
+    margin: 0;
+    overflow: hidden;
+    background-color: black;
+}
+
+canvas {
+    display: block;
+}
+.btn {
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+  color: white; /* Text color */
+  font-size: 16px; /* Font size */
+  font-weight: bold; /* Font weight */
+  padding: 12px 24px; /* Padding */
+  border: none; /* Remove border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  cursor: pointer; /* Pointer cursor */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+  margin-left: 50px;
+  margin-top: 20px;
+}
+
+.btn:hover {
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.btn:active {
+  transform: translateY(0); /* Reset on click */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Reset shadow on click */
+}

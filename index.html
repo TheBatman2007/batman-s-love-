@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiral Galaxy Full View</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+    <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai"></script>
+
+    <script type="importmap">
+        {
+          "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+          }
+        }
+    </script>
+
+    <script type="module">//src="gemini-module.js"
+
+        // import { GoogleGenerativeAI } from "@google/generative-ai";
+        // const API_KEY = "AIzaSyANuL-qo0a2988iGxOs4SqDkh_O6nkXFkU";
+        // const genAI = new GoogleGenerativeAI(API_KEY);
+        // const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        // async function generateContent(prompt) {
+        //     try {
+        //         const result = await model.generateContent(prompt);
+        //         return result.response.text();
+        //     } catch (error) {
+        //         console.error("Error generating content:", error);
+        //         return null;
+        //     }
+        // }
+        // async function displayContent(prompt) {
+        //     const got_text = await generateContent(prompt);
+        //     if (got_text !== null) {
+        //     }
+        //     return got_text;
+        // }
+        // window.displayContent = displayContent;
+
+        // async function ask() {
+        //     if (window.displayContent) {
+        //         try {
+        //             const response = await window.displayContent("Hi");
+        //             console.log(response);
+        //         } catch (error) {
+        //             console.error("Error using displayContent:", error);
+        //         }
+        //     } else {
+        //         console.error("displayContent function is not available.");
+        //     }
+        // }
+
+        // ask();
+
+        // import { GoogleGenerativeAI } from "@google/generative-ai";
+        // // import fs from 'fs/promises';
+
+        // const API_KEY = "AIzaSyANuL-qo0a2988iGxOs4SqDkh_O6nkXFkU"; // Replace with your API key
+        // const googleAI = new GoogleGenerativeAI(API_KEY);
+
+        // const geminiModel = googleAI.getGenerativeModel({ model: "gemini-pro-vision" });
+
+        // async function generateImageDescription() {
+        //     try {
+        //         // Read the image file and convert to base64
+        //         const imageFile = await fs.readFile('image.jpg');
+        //         const imageBase64 = imageFile.toString('base64');
+
+        //         // Create the prompt parts
+        //         const prompt = {
+        //             contents: [{
+        //                 role: 'user',
+        //                 parts: [
+        //                     { text: "Can you tell me about this image whats happening there?" },
+        //                     {
+        //                         inlineData: {
+        //                             mimeType: "image/jpeg",
+        //                             data: imageBase64
+        //                         }
+        //                     }
+        //                 ]
+        //             }]
+        //         };
+
+        //         // Generate the content
+        //         const result = await geminiModel.generateContent(prompt);
+        //         const response = await result.response;
+        //         console.log(response.text());
+
+        //     } catch (error) {
+        //         console.error("Error:", error);
+        //     }
+        // }
+
+        // generateImageDescription();
+
+
+
+    </script>
+</head>
+
+<body>
+
+    <div class="maincont" id="maincont">
+        <h1 id="weatherInfo">Loading weather data...</h1>
+        <div id="rocket-details"></div>
+        <button class="btn" id="reverse" onclick="rev()">Open Arm</button>
+        <button class="btn" id="forward" onclick="forw()">Close Arm</button>
+
+    </div>
+
+
+
+
+    <script src="main.js"></script>
+
+    <script type="module">
+
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.module.js';
+
+        // Scene, Camera, and Renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Galaxy Parameters
+        const galaxyParams = {
+            starCount: 10000,
+            radius: 10,
+            branches: 4,
+            spin: 1,
+            randomness: 0.5,
+            randomnessPower: 3,
+            colorInside: new THREE.Color(0xffddaa),
+            colorOutside: new THREE.Color(0xaaaaee),
+        };
+
+        // Geometry and Material
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(galaxyParams.starCount * 3);
+        const colors = new Float32Array(galaxyParams.starCount * 3);
+
+        for (let i = 0; i < galaxyParams.starCount; i++) {
+            const i3 = i * 3;
+
+            // Position
+            const radius = Math.random() * galaxyParams.radius;
+            const spinAngle = radius * galaxyParams.spin;
+            const branchAngle = (i % galaxyParams.branches) / galaxyParams.branches * Math.PI * 2;
+
+            const randomX = Math.pow(Math.random(), galaxyParams.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+            const randomY = Math.pow(Math.random(), galaxyParams.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+            const randomZ = Math.pow(Math.random(), galaxyParams.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+
+            positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+            positions[i3 + 1] = randomY;
+            positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+            // Color
+            const mixedColor = galaxyParams.colorInside.clone();
+            mixedColor.lerp(galaxyParams.colorOutside, radius / galaxyParams.radius);
+
+            colors[i3] = mixedColor.r;
+            colors[i3 + 1] = mixedColor.g;
+            colors[i3 + 2] = mixedColor.b;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.05,
+            vertexColors: true,
+        });
+
+        const galaxy = new THREE.Points(geometry, material);
+        scene.add(galaxy);
+
+        // Adjust Camera for Full View
+        camera.position.set(0, 20, 20); // Slightly angled top-down view
+        camera.lookAt(0, 0, 0); // Ensure the camera looks at the center of the galaxy
+
+        function animate() {
+            requestAnimationFrame(animate);
+            galaxy.rotation.y += 0.001; // Rotate galaxy
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+
+
+</body>
+
+</html>
